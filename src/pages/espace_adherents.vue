@@ -125,6 +125,7 @@ export default {
 </script>
 
 <style scoped>
+
 /* Flou arrière-plan */
 .blur {
   filter: blur(5px);
@@ -183,7 +184,8 @@ export default {
 
 /* Header et textes */
 h1 {
-  color: #ecf0f1;
+  color: #ee9bff;
+  font-size: 3rem;
   text-align: center;
 }
 

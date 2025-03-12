@@ -7,10 +7,10 @@
         <v-list-item to="/autre" class="dropdown-item">
           <v-list-item-title>Contact</v-list-item-title>
         </v-list-item>
-        <v-list-item href="mailto:contact@aecor.fr" class="dropdown-item">
+        <v-list-item to="/acces" class="dropdown-item">
           <v-list-item-title>Accès</v-list-item-title>
         </v-list-item>
-        <v-list-item href="https://aecor.fr" target="_blank" class="dropdown-item">
+        <v-list-item to="/agenda" target="_blank" class="dropdown-item">
           <v-list-item-title>Agenda</v-list-item-title>
         </v-list-item>
       </v-list>
