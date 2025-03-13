@@ -9,6 +9,7 @@
           <v-text-field
             v-model="enteredCode"
             label="Code d'accès"
+            type="password"
             :error="error"
             @keydown.enter="verifyCode"
             outlined
@@ -43,14 +44,27 @@
       <v-expansion-panel>
         <v-expansion-panel-title>Partitions Orchestre</v-expansion-panel-title>
         <v-expansion-panel-text>
+          <!-- Filtre par instrument -->
+          <v-select
+            v-model="instrumentSelectionne"
+            :items="instrumentsDisponibles"
+            label="Filtrer par instrument"
+            clearable
+          ></v-select>
+
           <div class="grid">
-            <div v-for="(morceau, index) in partitions.orchestre" :key="index" class="morceau">
-              <img :src="morceau.image" :alt="morceau.titre" @click="openMorceau(morceau)">
-              <p>{{ morceau.titre }}</p>
+            <div v-for="(morceau, index) in partitionsFiltrees.orchestre" :key="index" class="morceau">
+              <div v-for="(partition, instrument) in morceau.partitions" :key="instrument">
+                <div v-if="instrument.toLowerCase().includes(instrumentSelectionne?.toLowerCase())">
+                  <img :src="morceau.image" :alt="morceau.titre" @click="openMorceau(morceau, instrument)">
+                  <p>{{ morceau.titre }} - {{ instrument }}</p>
+                </div>
+              </div>
             </div>
           </div>
         </v-expansion-panel-text>
       </v-expansion-panel>
+
     </v-expansion-panels>
 
     <!-- Pop-up pour choisir la partition par instrument -->
@@ -74,6 +88,8 @@
 </template>
 
 <script>
+import { useSiteStore } from '../store/site';
+
 export default {
   name: "EspaceAdherents",
   data() {
@@ -81,24 +97,37 @@ export default {
       accessGranted: false,
       dialog: true,
       enteredCode: "",
+      siteStore: useSiteStore(),
       error: false,
-      partitions: {
-        chorale: [
-          { titre: "O Fortuna", image: "/public/images/o-fortuna.jpg", partitions: { "Chœur": "/public/partitions/o-fortuna.pdf" } },
-          { titre: "Ave Verum", image: "/public/images/ave-verum.jpg", partitions: { "Chœur": "/public/partitions/ave-verum.pdf" } }
-        ],
-        orchestre: [
-          { titre: "Stabat Mater, Poulenc", image: "/public/images/Poulenc.jpg", partitions: { "Alto clé de sol": "/public/partitions/Poulenc-Alto-cle-de-sol.pdf", "Alto clé Ut": "/public/partitions/Poulenc-Altos.pdf","Basson 1 & 2": "/public/partitions/Poulenc-Basson.pdf","Basson 3": "/public/partitions/Poulenc-Basson_3.pdf","Clarinette Basse": "/public/partitions/Poulenc-Clarinette_Basse.pdf","Clarinette Si b": "/public/partitions/Poulenc-Clarinette_en_Sib.pdf","Contrebasse 1": "/public/partitions/Poulenc-Contrebasse_1.pdf","Contrebasse 2": "/public/partitions/Poulenc-Contrebasse_2.pdf","Cor en Fa": "/public/partitions/Poulenc-Cor_en_Fa.pdf","Flûte": "/public/partitions/Poulenc-Flute.pdf","Hautbois": "/public/partitions/Poulenc-Hautbois.pdf","Sax Alto 1": "/public/partitions/Poulenc-Saxophone_Alto_1.pdf","Sax Alto 2": "/public/partitions/Poulenc-Saxophone_Alto_2.pdf","Timbales": "/public/partitions/Poulenc-Timbales.pdf","Trombone 1": "/public/partitions/Poulenc-Trombone_1.pdf","Trombone 2": "/public/partitions/Poulenc-Trombone_2.pdf", "Trompette 1 & 2": "/public/partitions/Poulenc-Trompette_en_Sib1_2.pdf","Trompette 3": "/public/partitions/Poulenc-Trompette_en_Sib_3.pdf","Violoncelle": "/public/partitions/Poulenc-Violoncelles.pdf","Violon 1": "/public/partitions/Poulenc-Violons_1.pdf","Violon 2": "/public/partitions/Poulenc-Violons_2.pdf","Violon 3": "/public/partitions/Poulenc-Violons_3.pdf",} },
-          { titre: "Schéhérazade, Rimski-Korsakov", image: "/public/images/rimski.jpg", partitions: { "Clarinette 1": "/public/partitions/bolero-clarinette.pdf", "Trompette 1": "/public/partitions/bolero-trompette.pdf" } },
-          { titre: "Concerto pour violon, Mendelssohn", image: "/public/images/mendelssohn.avif", partitions: { "Clarinette 1": "/public/partitions/bolero-clarinette.pdf", "Trompette 1": "/public/partitions/bolero-trompette.pdf" } },
-          { titre: "Carmen, Bizet", image: "/public/images/bizet.jpg", partitions: { "Clarinette 1": "/public/partitions/bolero-clarinette.pdf", "Trompette 1": "/public/partitions/bolero-trompette.pdf" } },
-          { titre: "The Mask of Zorro, James Horner", image: "/public/images/zorro.jpg", partitions: { "Clarinette 1": "/public/partitions/bolero-clarinette.pdf", "Trompette 1": "/public/partitions/bolero-trompette.pdf" } },
-          { titre: "Sleight Ride", image: "/public/images/noel.jpg", partitions: { "Clarinette 1": "/public/partitions/bolero-clarinette.pdf", "Trompette 1": "/public/partitions/bolero-trompette.pdf" } },
-        ]
-      },
       morceauDialog: false,
-      morceauSelectionne: {}
+      morceauSelectionne: {},
+      instrumentSelectionne: null
     };
+  },
+  computed: {
+    partitions() {
+      return this.siteStore.partitions;
+    },
+    instrumentsDisponibles() {
+      const instruments = new Set();
+      // Récupère les instruments dans les partitions de l'orchestre
+      this.siteStore.partitions.orchestre.forEach(morceau => {
+        Object.keys(morceau.partitions).forEach(instr => {
+          const instrumentPrincipal = instr.split(' ')[0]; // Sépare par espace et récupère la première partie
+          instruments.add(instrumentPrincipal); // Ajoute l'instrument sans numéro
+        });
+      });
+      return Array.from(instruments);
+    },
+    partitionsFiltrees() {
+      if (!this.instrumentSelectionne) return { chorale: this.partitions.chorale, orchestre: this.partitions.orchestre };
+      return {
+        chorale: this.partitions.chorale, // Ne pas filtrer la chorale
+        orchestre: this.partitions.orchestre.filter(morceau => 
+          Object.keys(morceau.partitions).some(instr => instr.split(' ')[0].toLowerCase().includes(this.instrumentSelectionne.toLowerCase()))
+        )
+      };
+    }
   },
   methods: {
     verifyCode() {
@@ -111,14 +140,19 @@ export default {
       }
     },
     goHome() {
-      this.$router.push("/"); // Redirection vers l'accueil
+      this.$router.push("/");
     },
-    openMorceau(morceau) {
-      this.morceauSelectionne = morceau;
-      this.morceauDialog = true;
+    openMorceau(morceau, instrument) {
+      // Trouve le lien de la partition spécifique à l'instrument
+      const lien = morceau.partitions[instrument];
+      this.telechargerPartition(lien);
     },
     telechargerPartition(lien) {
       window.open(lien, "_blank");
+    },
+    isInstrumentMatch(instrument) {
+      // Vérifie si l'instrument correspond exactement à celui sélectionné
+      return instrument.split(' ')[0].toLowerCase() === this.instrumentSelectionne.toLowerCase();
     }
   }
 };
@@ -165,10 +199,6 @@ export default {
   transition: transform 0.3s;
 }
 
-.morceau:hover {
-  transform: scale(1.1);
-}
-
 .morceau img {
   width: 100%;
   border-radius: 8px;
@@ -194,11 +224,39 @@ p {
   color: #bdc3c7;
 }
 /* Images au format carré */
+/* Grille des partitions avec un affichage fluide */
+/* Grille des partitions avec un affichage fluide */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Flexible, ajustable en fonction de la taille de l'écran */
+  gap: 20px;
+  margin-top: 10px;
+  justify-items: center; /* Centrer les éléments horizontalement */
+}
+
+/* Grille d'images et de textes de partitions */
+.morceau {
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s;
+  width: 100%; /* Assurez-vous que l'élément prend toute la largeur disponible */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 .morceau img {
   width: 100%;
-  aspect-ratio: 1 / 1; /* Assure un format carré */
-  object-fit: cover; /* Recadre sans déformer */
+  aspect-ratio: 1 / 1; /* Format carré pour les images */
+  object-fit: cover; /* Recadrage sans déformation */
   border-radius: 8px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out; /* Transition douce pour l'effet de zoom */
+}
+
+/* Applique l'effet de zoom uniquement à l'image au survol */
+.morceau img:hover {
+  transform: scale(1.1); /* Agrandissement de l'image */
 }
 </style>

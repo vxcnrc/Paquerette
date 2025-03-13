@@ -3,8 +3,8 @@
     <!-- Hero Section -->
     <section class="hero">
       <h1>Bienvenue à l'AECOR</h1>
-      <p>l'Association des Étudiants de la Chorale et de l’Orchestre de Rockefeller</p>
-      <router-link to="/actus" class="cta-button">Voir les actualités</router-link>
+      <p>L'Association des Étudiants de la Chorale et de l’Orchestre de Rockefeller</p>
+      <Bouton to="/actus">Voir les actualités</Bouton>
     </section>
 
     <!-- Pourquoi rejoindre l'AECOR -->
@@ -40,12 +40,11 @@
         </div>
       </div>
     </section>
-
   </div>
 </template>
 
 <script setup>
-// Pas de script spécifique pour l'instant
+import Bouton from "../components/Bouton.vue";
 </script>
 
 <style scoped>
