@@ -2,23 +2,9 @@
   <div class="contact-page">
     <h1 class="title">Contactez-nous</h1>
 
-      <!-- Section Contacts (Maintenant en haut) -->
+    <!-- Section Contacts (Maintenant en haut) -->
     <section class="contacts">
-      <h2>Nos réseaux</h2>
-      <div class="socials">
-        <a href="https://www.instagram.com/aecor.lyon" target="_blank" class="icon">
-          <img src="/images/logo/Instagram_logo.webp" alt="Instagram" />
-        </a>
-        <a href="https://www.facebook.com/search/top?q=chorale%20orchestre%20aecor" target="_blank" class="icon">
-          <img src="/images/logo/Facebook_logo.webp" alt="Facebook" />
-        </a>
-        <a href="https://www.youtube.com/@orchestrechoraleaecor9580" target="_blank" class="icon">
-          <img src="/images/logo/Youtube_logo.png" alt="YouTube" />
-        </a>
-        <a href="mailto:contact@aecor.fr" class="icon">
-          <img src="/images/logo/Mail_logo.png" alt="Mail" />
-        </a>
-      </div>
+    
 
       <!-- Formulaire de Contact -->
       <h2>Nous contacter</h2>
@@ -139,16 +125,15 @@ h2 {
   gap: 15px;
   margin-top: 20px;
 }
-.icon img {
-	width: 40px;
-	height: 40px;
-	transition: transform 0.2s ease;
+
+.icon {
+  font-size: 2rem;
+  transition: transform 0.2s ease;
 }
 
-.icon img:hover {
-	transform: scale(1.2);
+.icon:hover {
+  transform: scale(1.2);
 }
-
 
 .instagram { color: #E4405F; }
 .facebook { color: #1877F2; }
