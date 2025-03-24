@@ -1,11 +1,14 @@
 <template>
   <div class="acces-page">
+    <!-- Utilisation du composant GrosTitre pour afficher le titre de la page -->
     <GrosTitre>Accès aux Salles de Répétition</GrosTitre>
 
+    <!-- Introduction sur l'accès aux salles -->
     <p>
       Les répétitions de l'AECOR ont lieu sur le campus Rockefeller (faculté Lyon-Est) au 8 Avenue Rockefeller. Voici les informations concernant l'accès aux salles utilisées :
     </p>
 
+    <!-- Salle RB-001 -->
     <div class="room">
       <h3>Salle RB-001</h3>
       <p>La salle RB-001 est située au rez-de-chaussée du bâtiment RB. Pour y accéder, consultez la carte ci-dessous :</p>
@@ -15,6 +18,7 @@
       </iframe>
     </div>
 
+    <!-- Amphi A (Bâtiment JF Cier) -->
     <div class="room">
       <h3>Amphi A (Bâtiment JF Cier)</h3>
       <p>L'Amphi A se trouve dans le bâtiment JF Cier. Pour y accéder, consultez la carte ci-dessous :</p>
@@ -24,6 +28,7 @@
       </iframe>
     </div>
 
+    <!-- Informations sur l'accès TCL -->
     <div class="tcl-access">
       <h3>Accès TCL</h3>
       <p>Le campus Rockefeller est accessible par les transports en commun. Vous pouvez prendre les lignes suivantes :</p>
@@ -34,6 +39,7 @@
       </ul>
     </div>
 
+    <!-- Informations supplémentaires sur les horaires -->
     <p>
       Les répétitions ont habituellement lieu les lundis (Chorale) et mardis (Orchestre) de 18h à 20h. Pour plus de précisions, rendez-vous sur la page de l’agenda !
     </p>
@@ -41,65 +47,74 @@
 </template>
 
 <script>
-import GrosTitre from "../components/Gros_titre.vue";
+import GrosTitre from "../components/Gros_titre.vue";  // Importation du composant GrosTitre pour le titre
 
 export default {
-  name: "Acces",
+  name: "Acces",  // Nom du composant
   components: {
-    GrosTitre,
+    GrosTitre,  // Déclaration du composant GrosTitre
   },
 };
 </script>
 
 <style scoped>
+/* Styles pour la page d'accès */
 .acces-page {
   padding: 30px;
   font-family: 'Arial', sans-serif;
-  color: #ffffff;
+  color: #ffffff;  /* Couleur du texte en blanc pour contraster avec le fond */
 }
 
+/* Style pour les titres des sections */
 h3 {
-  color: #ffb78b; /* Orange clair */
+  color: #ffb78b;  /* Orange clair pour les titres de salle et autres sections */
   font-size: 1.5rem;
   margin-top: 30px;
 }
 
+/* Styles pour chaque section de salle */
 .room, .tcl-access {
-  margin-bottom: 40px;
+  margin-bottom: 40px;  /* Ajout d'espace sous chaque section */
 }
 
+/* Style pour les iframes de Google Maps */
 iframe {
   width: 100%;
   height: 450px;
-  border: none;
-  margin-top: 10px;
+  border: none;  /* Supprime les bordures autour des cartes */
+  margin-top: 10px;  /* Ajoute un petit espace au-dessus de la carte */
 }
 
+/* Liste des transports en commun */
 ul {
-  list-style-type: none;
-  padding: 0;
+  list-style-type: none;  /* Enlève les puces des éléments de la liste */
+  padding: 0;  /* Enlève le padding par défaut */
 }
 
+/* Style des éléments de la liste */
 ul li {
   font-size: 1rem;
-  margin-bottom: 10px;
+  margin-bottom: 10px;  /* Ajoute de l'espace entre les éléments de la liste */
 }
 
+/* Style des paragraphes */
 p {
   font-size: 1.1rem;
-  line-height: 1.6;
+  line-height: 1.6;  /* Augmente l'espacement entre les lignes pour améliorer la lisibilité */
 }
 
+/* Section "Accès TCL" pour rendre le texte en gras pour les lignes de transport */
 .tcl-access ul li {
-  font-weight: bold;
+  font-weight: bold;  /* Met les lignes de transport en gras */
 }
 
+/* Media queries pour les petits écrans (téléphones) */
 @media screen and (max-width: 768px) {
   .acces-page {
-    padding: 20px;
+    padding: 20px;  /* Réduit le padding sur les petits écrans */
   }
   iframe {
-    height: 350px;
+    height: 350px;  /* Réduit la taille des iframes sur les petits écrans */
   }
 }
 </style>

@@ -94,30 +94,30 @@ export default {
   name: "EspaceAdherents",
   data() {
     return {
-      accessGranted: false,
-      dialog: true,
-      enteredCode: "",
-      siteStore: useSiteStore(),
-      error: false,
-      morceauDialog: false,
-      morceauSelectionne: {},
-      instrumentSelectionne: null
+      accessGranted: false,  // Contrôle l'accès à l'espace adhérents
+      dialog: true,  // Contrôle l'affichage de la fenêtre modale de connexion
+      enteredCode: "",  // Code d'accès saisi par l'utilisateur
+      siteStore: useSiteStore(),  // Utilisation du store Pinia pour accéder aux partitions
+      error: false,  // Indicateur d'erreur pour le code d'accès
+      morceauDialog: false,  // Affiche le dialogue pour choisir l'instrument d'une partition
+      morceauSelectionne: {},  // Contient le morceau sélectionné pour l'instrument
+      instrumentSelectionne: null  // Instrument sélectionné pour filtrer les partitions
     };
   },
   computed: {
     partitions() {
-      return this.siteStore.partitions;
+      return this.siteStore.partitions;  // Accède aux partitions depuis le store Pinia
     },
     instrumentsDisponibles() {
       const instruments = new Set();
       // Récupère les instruments dans les partitions de l'orchestre
       this.siteStore.partitions.orchestre.forEach(morceau => {
         Object.keys(morceau.partitions).forEach(instr => {
-          const instrumentPrincipal = instr.split(' ')[0]; // Sépare par espace et récupère la première partie
-          instruments.add(instrumentPrincipal); // Ajoute l'instrument sans numéro
+          const instrumentPrincipal = instr.split(' ')[0];  // Sépare par espace et récupère la première partie
+          instruments.add(instrumentPrincipal);  // Ajoute l'instrument sans numéro
         });
       });
-      return Array.from(instruments);
+      return Array.from(instruments);  // Retourne un tableau d'instruments uniques
     },
     partitionsFiltrees() {
       if (!this.instrumentSelectionne) return { chorale: this.partitions.chorale, orchestre: this.partitions.orchestre };
@@ -125,30 +125,30 @@ export default {
         chorale: this.partitions.chorale, // Ne pas filtrer la chorale
         orchestre: this.partitions.orchestre.filter(morceau => 
           Object.keys(morceau.partitions).some(instr => instr.split(' ')[0].toLowerCase().includes(this.instrumentSelectionne.toLowerCase()))
-        )
+        )  // Filtre les partitions de l'orchestre par instrument
       };
     }
   },
   methods: {
     verifyCode() {
       if (this.enteredCode === "part2025") {
-        this.accessGranted = true;
-        this.dialog = false;
-        this.error = false;
+        this.accessGranted = true;  // L'accès est accordé si le code est correct
+        this.dialog = false;  // Ferme la fenêtre modale
+        this.error = false;  // Réinitialise l'erreur
       } else {
-        this.error = true;
+        this.error = true;  // Affiche un message d'erreur si le code est incorrect
       }
     },
     goHome() {
-      this.$router.push("/");
+      this.$router.push("/");  // Redirige vers la page d'accueil
     },
     openMorceau(morceau, instrument) {
       // Trouve le lien de la partition spécifique à l'instrument
       const lien = morceau.partitions[instrument];
-      this.telechargerPartition(lien);
+      this.telechargerPartition(lien);  // Lance le téléchargement de la partition
     },
     telechargerPartition(lien) {
-      window.open(lien, "_blank");
+      window.open(lien, "_blank");  // Ouvre la partition dans un nouvel onglet
     },
     isInstrumentMatch(instrument) {
       // Vérifie si l'instrument correspond exactement à celui sélectionné
@@ -157,6 +157,7 @@ export default {
   }
 };
 </script>
+
 
 <style scoped>
 
